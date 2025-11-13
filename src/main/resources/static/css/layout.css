@@ -1,0 +1,379 @@
+
+:root {
+    --jb-primary: #0d6efd;
+    --jb-primary-soft: #e8f0ff;
+    --jb-dark: #1f2933;
+    --jb-muted: #6c757d;
+    --jb-border: #e2e8f0;
+    --jb-bg: #f5f7fb;
+    --jb-card-bg: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: var(--jb-bg);
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--jb-dark);
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+/* ========== NAVBAR / HEADER ========== */
+nav.navbar {
+    background: linear-gradient(120deg, #0b5ed7, #4c8dff);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+}
+
+nav.navbar .navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffffff !important;
+}
+
+nav.navbar .navbar-brand span {
+    font-weight: 300;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+nav.navbar .navbar-nav .nav-link {
+    color: #e5edff !important;
+    font-weight: 500;
+    margin-inline: 0.35rem;
+    padding-inline: 0.8rem;
+    border-radius: 999px;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+nav.navbar .navbar-nav .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.16);
+    color: #ffffff !important;
+    transform: translateY(-1px);
+}
+
+nav.navbar .navbar-nav .nav-link.active,
+nav.navbar .navbar-nav .nav-link[aria-current="page"] {
+    background-color: #ffffff;
+    color: #0b5ed7 !important;
+}
+
+nav.navbar .btn-outline-light {
+    border-radius: 999px;
+    font-weight: 500;
+    padding-inline: 1rem;
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+.navbar-toggler-icon {
+    filter: invert(1);
+}
+
+/* ========== MAIN LAYOUT ========== */
+main {
+    min-height: 70vh;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+}
+
+/* ===== HOME WRAPPER ===== */
+#homeContent {
+    /* margin-top: 0.5rem; nếu muốn xa header hơn */
+}
+
+/* ========== HERO SECTION HOME ========== */
+.hero-section {
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(circle at top left, #4c8dff, #0b5ed7);
+    color: #ffffff;
+}
+
+.hero-section::before,
+.hero-section::after {
+    content: "";
+    position: absolute;
+    border-radius: 999px;
+    opacity: 0.22;
+    pointer-events: none;
+}
+
+.hero-section::before {
+    width: 420px;
+    height: 420px;
+    background: #ffffff;
+    top: -170px;
+    right: -90px;
+    filter: blur(12px);
+}
+
+.hero-section::after {
+    width: 320px;
+    height: 320px;
+    background: #60a5fa;
+    bottom: -140px;
+    left: -80px;
+    filter: blur(16px);
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-section h1 {
+    font-size: clamp(2.1rem, 3vw, 2.8rem);
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+.hero-section p.lead {
+    max-width: 620px;
+    margin: 0 auto 1.75rem auto;
+    font-weight: 400;
+    opacity: 0.96;
+}
+
+/* Search box trong hero */
+.hero-section .input-group,
+.home-search-group {
+    max-width: 620px;
+    background-color: #ffffff;
+    border-radius: 999px;
+    padding: 4px;
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.35);
+}
+
+.home-search-group .form-control,
+.hero-section .input-group .form-control {
+    border: none;
+    border-radius: 999px 0 0 999px;
+    padding-left: 1.2rem;
+    font-size: 0.95rem;
+}
+
+.home-search-group .form-control::placeholder,
+.hero-section .input-group .form-control::placeholder {
+    color: #9ca3af;
+}
+
+.home-search-group .form-control:focus,
+.hero-section .input-group .form-control:focus {
+    box-shadow: none;
+}
+
+.home-search-group .btn,
+.hero-section .input-group .btn {
+    border-radius: 999px;
+    font-weight: 600;
+    padding-inline: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.home-search-group .btn i,
+.hero-section .input-group .btn i {
+    font-size: 0.9rem;
+}
+
+/* ========== HOME LIST SECTIONS ========== */
+.home-list-section {
+    background-color: var(--jb-bg);
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.home-section-title {
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.home-section-title i {
+    font-size: 1.2rem;
+}
+
+/* 👉 2 cột Company + Job BẰNG NHAU (cùng chiều cao) */
+.home-list-section .row {
+    align-items: stretch; /* kéo 2 col cao bằng nhau */
+}
+
+.home-list-section .row > [class^="col-"],
+.home-list-section .row > [class*=" col-"] {
+    display: flex;
+}
+
+.home-card {
+    border: none;
+    border-radius: 18px;
+    background-color: transparent;
+    box-shadow: none;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.home-card .card-body {
+    padding: 1.5rem 1.5rem 1.3rem 1.5rem;
+    background-color: var(--jb-card-bg);
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Danh sách item chiếm hết thân card, nút View all luôn dính đáy */
+.home-card .list-group {
+    border: none;
+    margin-bottom: 0.75rem;
+    flex: 1;
+}
+
+/* Mỗi item là 1 ô card nhỏ */
+.home-card .list-group-item {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 14px !important;
+    margin-bottom: 0.8rem;
+    background-color: #ffffff;
+    padding: 0.85rem 1rem;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+    display: block;
+}
+
+.home-card .list-group-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Empty state */
+.home-card .list-group-item.text-center.text-muted {
+    box-shadow: none;
+    border-style: dashed !important;
+}
+
+.home-card .list-group-item h6 {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+}
+
+.home-card .list-group-item small {
+    font-size: 0.8rem;
+}
+
+.home-card .list-group-item a {
+    font-size: 0.78rem;
+    word-break: break-all;
+}
+
+/* Link job */
+.job-link {
+    color: inherit;
+}
+
+.job-link:hover {
+    text-decoration: none;
+}
+
+/* Tag ngày đăng job */
+.job-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background-color: var(--jb-primary-soft);
+    color: #2563eb;
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+.job-date i {
+    font-size: 0.85rem;
+}
+
+/* Nút view all */
+.home-card .text-end.mt-3 .btn {
+    border-radius: 999px;
+    font-size: 0.8rem;
+    padding: 5px 14px;
+}
+
+/* ========== FOOTER ========== */
+footer {
+    background: #ffffff;
+    color: var(--jb-muted);
+    text-align: center;
+    padding: 18px 0;
+    margin-top: 0;
+    border-top: 1px solid var(--jb-border);
+    font-size: 0.85rem;
+}
+
+footer .footer-brand {
+    font-weight: 600;
+    color: #0b5ed7;
+}
+
+footer a {
+    color: #0b5ed7;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 991.98px) {
+    main {
+        padding-top: 1.5rem;
+    }
+
+    .home-card .card-body {
+        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-section {
+        padding-top: 3.5rem !important;
+        padding-bottom: 3.2rem !important;
+    }
+
+    .hero-section h1 {
+        font-size: 1.9rem;
+    }
+
+    .hero-section p.lead {
+        font-size: 0.95rem;
+    }
+
+    .hero-section .input-group,
+    .home-search-group {
+        max-width: 100%;
+        margin-inline: 1rem;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.35);
+    }
+
+    .home-list-section .card-body {
+        margin-inline: 0.25rem;
+    }
+}
+

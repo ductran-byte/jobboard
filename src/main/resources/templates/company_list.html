@@ -1,181 +1,190 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:replace="~{layout :: layout(~{::#companyListContent})}">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Company List</title>
+    <title>Companies - JobBoard</title>
+</head>
+<body>
+<div id="companyListContent">
 
-    <!-- Bootstrap 5 -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-
+    <!-- 🔧 CSS riêng cho trang Company List (giống Job List) -->
     <style>
-        /* 🎨 Tổng thể */
-        body {
-            background-color: #f8fafc;
-            font-family: "Inter", system-ui, sans-serif;
+        .company-table-title {
+            font-weight: 600;
         }
 
-        h2 {
-            font-weight: 600;
+        .sort-link {
+            font-size: 0.75rem;
+            margin-left: 4px;
+            color: #6b7280;
+            text-decoration: none;
+        }
+
+        .sort-link:hover {
             color: #0d6efd;
         }
-
-        /* 🔔 Thông báo */
-        .alert {
-            transition: opacity 0.6s ease, transform 0.3s ease;
-            max-width: 600px;
-            margin: 0 auto 20px;
-        }
-
-        .alert.fade-out {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-
-        /* 📋 Bảng */
-        .table {
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .table th {
-            background-color: #e9ecef;
-        }
-
-        .table td,
-        .table th {
-            vertical-align: middle;
-        }
-
-        /* 📱 Responsive Table Cards cho mobile */
-        @media (max-width: 768px) {
-            .table-responsive {
-                border: none;
-            }
-
-            table.table {
-                display: block;
-                border: none;
-            }
-
-            thead {
-                display: none;
-            }
-
-            tbody {
-                display: block;
-                width: 100%;
-            }
-
-            tbody tr {
-                display: block;
-                background: #fff;
-                margin-bottom: 15px;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-                padding: 10px 15px;
-            }
-
-            tbody td {
-                display: flex;
-                justify-content: space-between;
-                border: none !important;
-                padding: 8px 0;
-                font-size: 14px;
-            }
-
-            tbody td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: #495057;
-            }
-
-            tbody td a.btn {
-                font-size: 12px;
-                padding: 4px 8px;
-            }
-        }
     </style>
-</head>
 
-<body>
-<div class="container py-4">
+    <!-- 🔹 Title + Add Company (giống Job List) -->
+    <section class="pt-4 pb-2">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h2 class="mb-0">Company List</h2>
+            <a href="/companies/create" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Add Company
+            </a>
+        </div>
+    </section>
 
-    <h2 class="text-center mb-4">Company List</h2>
+    <!-- 🔔 Flash message -->
+    <section class="pb-1">
+        <div class="container">
+            <div th:if="${message != null && !#strings.isEmpty(message)}"
+                 class="alert alert-success py-2 mb-2">
+                <span th:text="${message}"></span>
+            </div>
+        </div>
+    </section>
 
-    <!-- ✅ Thông báo -->
-    <div th:if="${message != null and !#strings.isEmpty(message)}"
-         id="alertBox"
-         class="alert alert-success text-center fade show shadow-sm"
-         role="alert"
-         th:text="${message}">
-    </div>
+    <!-- 🔍 Thanh tìm kiếm (auto search giống jobs) -->
+    <section class="py-2">
+        <div class="container">
+            <form id="searchFormCompanies"
+                  class="row g-2 align-items-center"
+                  method="get"
+                  th:action="@{/companies}">
+                <!-- Khi gõ keyword mới thì luôn quay về trang 1 -->
+                <input type="hidden" name="page" value="1"/>
 
-    <!-- ➕ Nút thêm -->
-    <div class="mb-3 text-end">
-        <a href="/companies/create" class="btn btn-success px-3 py-2 fw-semibold shadow-sm">
-            + Add Company
-        </a>
-    </div>
+                <div class="col-md-6">
+                    <input type="text"
+                           id="keywordInputCompanies"
+                           name="keyword"
+                           class="form-control"
+                           placeholder="Search by company name, email or website..."
+                           th:value="${keyword}">
+                </div>
 
-    <!-- 📊 Danh sách -->
-    <div class="table-responsive shadow-sm rounded">
-        <table class="table table-bordered table-striped align-middle">
-            <thead>
-            <tr>
-                <th style="width: 5%">#</th>
-                <th style="width: 20%">Name</th>
-                <th style="width: 25%">Address</th>
-                <th style="width: 20%">Email</th>
-                <th style="width: 20%">Website</th>
-                <th style="width: 10%">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="company, iterStat : ${companies}">
-                <td data-label="#" th:text="${iterStat.index + 1}"></td>
-                <td data-label="Name" th:text="${company.name}"></td>
-                <td data-label="Address" th:text="${company.address}"></td>
-                <td data-label="Email" th:text="${company.email}"></td>
-                <td data-label="Website">
-                    <a th:if="${company.website != null and !company.website.isEmpty()}"
-                       th:href="${company.website}"
-                       th:text="${company.website}"
-                       target="_blank"
-                       class="text-decoration-none text-primary fw-semibold"></a>
-                </td>
-                <td data-label="Actions" class="text-center">
-                    <a th:href="@{'/companies/edit/' + ${company.id}}"
-                       class="btn btn-sm btn-primary me-1">Edit</a>
-                    <a th:href="@{'/companies/delete/' + ${company.id}}"
-                       class="btn btn-sm btn-danger"
-                       onclick="return confirm('Are you sure you want to delete this company?')">Delete</a>
-                </td>
-            </tr>
+            </form>
 
-            <tr th:if="${companies.isEmpty()}">
-                <td colspan="6" class="text-center text-muted py-4">
-                    No companies found.
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+            <small class="text-muted d-block mt-1">
+                💡 Type keyword and pause a bit, the list will auto filter.
+            </small>
+        </div>
+    </section>
+
+    <!-- 📋 Bảng danh sách company (card giống Job List) -->
+    <section class="pb-5">
+        <div class="container">
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <table class="table mb-0 align-middle table-hover">
+                        <thead class="table-light">
+                        <tr>
+                            <th class="company-table-title" style="width: 60px;">#</th>
+                            <th class="company-table-title">Name</th>
+                            <th class="company-table-title">Email</th>
+                            <th class="company-table-title">Website</th>
+                            <th class="company-table-title">Address</th>
+                            <th class="company-table-title text-end" style="width: 160px;">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c, stat : ${companies}">
+                            <td th:text="${stat.index + 1}">1</td>
+                            <td>
+                                <a th:href="@{/companies/{id}(id=${c.id})}"
+                                   th:text="${c.name}"
+                                   class="text-decoration-none fw-semibold text-primary"></a>
+                            </td>
+                            <td th:text="${c.email}">email@example.com</td>
+                            <td>
+                                <a th:href="${c.website}"
+                                   th:text="${c.website}"
+                                   target="_blank"
+                                   class="small text-decoration-none"></a>
+                            </td>
+                            <td th:text="${c.address}">Address</td>
+                            <td class="text-end">
+                                <a th:href="@{/companies/edit/{id}(id=${c.id})}"
+                                   class="btn btn-sm btn-outline-secondary me-1">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+
+                                <!-- 🗑️ Xoá company + jobs (xác nhận) -->
+                                <a th:href="@{/companies/delete/{id}(id=${c.id})}"
+                                   class="btn btn-sm btn-outline-danger"
+                                   onclick="return confirm('Bạn có chắc muốn xoá company này và toàn bộ job thuộc về nó không?');">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(companies)}">
+                            <td colspan="6" class="text-center text-muted py-4">
+                                No companies found.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 🔁 Phân trang (giữ nguyên logic cũ, style giống job list) -->
+            <nav th:if="${totalPages > 1}" class="mt-3">
+                <ul class="pagination justify-content-center mb-0">
+                    <li class="page-item"
+                        th:classappend="${currentPage == 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/companies(page=${currentPage - 1}, keyword=${keyword})}">
+                            Previous
+                        </a>
+                    </li>
+
+                    <li class="page-item"
+                        th:each="p : ${#numbers.sequence(1, totalPages)}"
+                        th:classappend="${p == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:text="${p}"
+                           th:href="@{/companies(page=${p}, keyword=${keyword})}"></a>
+                    </li>
+
+                    <li class="page-item"
+                        th:classappend="${currentPage == totalPages} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/companies(page=${currentPage + 1}, keyword=${keyword})}">
+                            Next
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <!-- 🧠 Script auto search + auto focus (giống jobs) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const input = document.getElementById('keywordInputCompanies');
+            const form = document.getElementById('searchFormCompanies');
+            if (!input || !form) return;
+
+            // Focus ô tìm kiếm + đưa con trỏ về cuối chuỗi
+            input.focus();
+            const val = input.value;
+            input.setSelectionRange(val.length, val.length);
+
+            let typingTimer;
+            const DONE_TYPING_INTERVAL = 500; // 0.5s sau khi dừng gõ thì search
+
+            input.addEventListener('keyup', function () {
+                clearTimeout(typingTimer);
+                typingTimer = setTimeout(function () {
+                    form.submit();
+                }, DONE_TYPING_INTERVAL);
+            });
+        });
+    </script>
+
 </div>
-
-<!-- ✅ Script: Tự động ẩn alert -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const alertBox = document.getElementById("alertBox");
-        if (alertBox) {
-            setTimeout(() => {
-                alertBox.classList.add("fade-out");
-                setTimeout(() => alertBox.remove(), 600);
-            }, 2500);
-        }
-    });
-</script>
-
 </body>
 </html>

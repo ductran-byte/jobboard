@@ -1,0 +1,152 @@
+/* ==== Company List Page ==== */
+
+.company-page {
+    /* có thể để trống, nhưng nếu muốn chỉnh riêng page này thì thêm ở đây */
+}
+
+/* Tiêu đề */
+.company-page h2 {
+    font-weight: 600;
+    color: #0d6efd;
+}
+
+/* Alert thông báo */
+.company-page .company-alert {
+    transition: opacity 0.6s ease, transform 0.3s ease;
+    max-width: 600px;
+    margin: 0 auto 20px;
+}
+
+.company-page .company-alert.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+/* ==== GRID DANH SÁCH CÔNG TY ==== */
+.company-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+}
+
+/* Card từng công ty */
+.company-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 16px 18px 14px 18px;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.company-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.16);
+    border-color: #bfdbfe;
+}
+
+/* Header card: Số thứ tự + Tên công ty */
+.company-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.35rem;
+}
+
+.company-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    background-color: #e0ecff;
+    color: #1d4ed8;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.company-name {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Body card: các dòng thông tin */
+.company-card-body {
+    margin-bottom: 0.4rem;
+}
+
+.company-row {
+    display: flex;
+    margin-bottom: 0.2rem;
+    font-size: 0.9rem;
+}
+
+.company-row .label {
+    min-width: 70px;
+    font-weight: 500;
+    color: #4b5563;
+}
+
+.company-row .value {
+    flex: 1;
+    color: #111827;
+}
+
+/* Website link */
+.company-website-link {
+    color: #2563eb;
+    text-decoration: none;
+    word-break: break-all;
+    font-size: 0.88rem;
+}
+
+.company-website-link:hover {
+    text-decoration: underline;
+}
+
+/* Footer: nút hành động */
+.company-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.4rem;
+}
+
+.company-card-footer .btn-group {
+    display: inline-flex;
+    gap: 0.4rem;
+}
+
+/* Empty state */
+.company-empty {
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+    border: 1px dashed #d1d5db;
+    font-size: 0.95rem;
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 576px) {
+    .company-card {
+        padding: 14px 14px 12px 14px;
+    }
+
+    .company-row {
+        flex-direction: column;
+    }
+
+    .company-row .label {
+        margin-bottom: 2px;
+    }
+
+    .company-card-footer {
+        justify-content: flex-start;
+    }
+}

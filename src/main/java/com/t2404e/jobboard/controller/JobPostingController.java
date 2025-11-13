@@ -24,21 +24,38 @@ public class JobPostingController {
         this.companyService = companyService;
     }
 
-    // 📋 Danh sách Job + Tìm kiếm + Phân trang
+    // 📋 Danh sách Job + Tìm kiếm + Phân trang + Sắp xếp
     @GetMapping
     public String listJobs(@RequestParam(defaultValue = "1") int page,
                            @RequestParam(defaultValue = "5") int size,
                            @RequestParam(required = false) String keyword,
+                           @RequestParam(required = false, name = "sortField") String sortField,
+                           @RequestParam(required = false, name = "sortDir") String sortDir,
                            Model model,
                            @ModelAttribute("message") String message) {
 
-        Page<JobPosting> jobPage = jobPostingService.findPaginatedAndFiltered(keyword, page, size);
+        // Default sort nếu chưa có
+        if (sortField == null || sortField.isBlank()) {
+            sortField = "postedDate";
+        }
+        if (sortDir == null || sortDir.isBlank()) {
+            sortDir = "desc";
+        }
+
+        Page<JobPosting> jobPage = jobPostingService
+                .findPaginatedAndFiltered(keyword, page, size, sortField, sortDir);
 
         model.addAttribute("jobs", jobPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", jobPage.getTotalPages());
+
         model.addAttribute("keyword", keyword);
         model.addAttribute("message", message);
+
+        // ✅ Đưa thông tin sort ra view
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+
         return "job_list";
     }
 
@@ -91,7 +108,7 @@ public class JobPostingController {
         return "redirect:/jobs";
     }
 
-    // 🔍 Chi tiết công việc
+    // 🔍 Chi tiết job
     @GetMapping("/detail/{id}")
     public String jobDetail(@PathVariable Long id, Model model) {
         JobPosting job = jobPostingService.findById(id)

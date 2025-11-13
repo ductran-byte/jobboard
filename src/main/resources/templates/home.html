@@ -1,111 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(~{::#homeContent})}">
 <head>
     <meta charset="UTF-8">
-    <title>JobBoard - Find Your Dream Job</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        /* 🌆 Hero background */
-        .hero-section {
-            background: linear-gradient(to right, #0d6efd, #007bff);
-            color: white;
-            padding: 100px 0;
-        }
-
-        .hero-section h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-        }
-
-        .hero-section p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .search-bar {
-            max-width: 600px;
-            margin: 20px auto;
-            background: white;
-            border-radius: 50px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            padding: 10px;
-        }
-
-        .search-bar input {
-            border: none;
-            outline: none;
-            width: 80%;
-            padding: 8px 15px;
-            border-radius: 50px;
-        }
-
-        .search-bar button {
-            border-radius: 50px;
-        }
-
-        .section-title {
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #0d6efd;
-        }
-
-        footer {
-            background: #f8f9fa;
-            color: #6c757d;
-            padding: 20px 0;
-            margin-top: 50px;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            transition: all 0.3s ease;
-        }
-    </style>
+    <title>Home - JobBoard</title>
 </head>
-
 <body>
-<div th:replace="~{layout :: layout(~{::section})}">
-    <!-- 🏙️ Hero Section -->
-    <section class="hero-section text-center">
+<div id="homeContent">
+    <!-- 🌆 HERO -->
+    <section class="hero-section text-center text-white py-5">
         <div class="container">
-            <h1>Find Your Dream Job Today</h1>
-            <p>Thousands of job opportunities are waiting for you. Start your journey now!</p>
+            <h1 class="fw-bold mb-3">Find Your Dream Job Today</h1>
+            <p class="lead mb-4">
+                Thousands of opportunities are waiting. Start your journey now!
+            </p>
 
-            <!-- 🔍 Search bar -->
-            <form action="/jobs" method="get" class="search-bar d-flex align-items-center">
-                <input type="text" name="keyword" placeholder="Search for jobs, skills or companies...">
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Search
-                </button>
+            <!-- 🔍 Search form -->
+            <form action="/jobs" method="get" class="d-flex justify-content-center">
+                <div class="input-group home-search-group">
+                    <input type="text"
+                           class="form-control"
+                           name="keyword"
+                           placeholder="Search jobs, skills or companies...">
+                    <button class="btn btn-light fw-semibold" type="submit">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                </div>
             </form>
         </div>
     </section>
 
-    <!-- 📊 Content -->
-    <section class="py-5">
+    <!-- 📋 LIST SECTIONS -->
+    <section class="py-5 home-list-section">
         <div class="container">
             <div class="row g-4">
+
                 <!-- 🏢 Top Companies -->
                 <div class="col-lg-6">
-                    <div class="card shadow-sm border-0 h-100">
+                    <div class="card home-card">
                         <div class="card-body">
-                            <h4 class="section-title"><i class="bi bi-building"></i> Top Companies</h4>
+                            <h4 class="home-section-title text-primary fw-semibold mb-3">
+                                <i class="bi bi-building"></i> Top Companies
+                            </h4>
+
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item" th:each="c : ${topCompanies}">
-                                    <div class="d-flex align-items-start">
-                                        <div class="flex-grow-1">
-                                            <h6 class="fw-semibold text-dark mb-1" th:text="${c.name}"></h6>
-                                            <small class="text-muted" th:text="${c.address}"></small><br>
-                                            <a th:href="${c.website}" class="text-primary small" target="_blank"
-                                               th:text="${c.website}"></a>
-                                        </div>
-                                    </div>
+                                <li class="list-group-item"
+                                    th:each="c : ${topCompanies}">
+                                    <h6 class="fw-semibold mb-1"
+                                        th:text="${c.name}">Company name</h6>
+
+                                    <small class="text-muted d-block mb-1"
+                                           th:text="${c.address}">Address</small>
+
+                                    <a class="small text-primary text-decoration-none"
+                                       th:if="${c.website != null and !c.website.isEmpty()}"
+                                       th:href="${c.website}"
+                                       th:text="${c.website}"
+                                       target="_blank">
+                                        https://example.com
+                                    </a>
                                 </li>
-                                <li class="list-group-item text-center text-muted" th:if="${topCompanies.isEmpty()}">
+
+                                <!-- Empty state -->
+                                <li class="list-group-item text-center text-muted"
+                                    th:if="${topCompanies.isEmpty()}">
                                     No companies found.
                                 </li>
                             </ul>
+
                             <div class="text-end mt-3">
                                 <a href="/companies" class="btn btn-outline-primary btn-sm">
                                     View all companies
@@ -117,24 +79,40 @@
 
                 <!-- 💼 Latest Jobs -->
                 <div class="col-lg-6">
-                    <div class="card shadow-sm border-0 h-100">
+                    <div class="card home-card">
                         <div class="card-body">
-                            <h4 class="section-title"><i class="bi bi-briefcase"></i> Latest Jobs</h4>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item" th:each="j : ${latestJobs}">
-                                    <div class="d-flex align-items-start">
-                                        <div class="flex-grow-1">
-                                            <h6 class="fw-semibold text-primary mb-1" th:text="${j.title}"></h6>
-                                            <small class="text-muted" th:text="${j.company.name}"></small><br>
-                                            <small class="text-secondary" th:text="${#temporals.format(j.postedDate, 'dd MMM yyyy')}"></small>
+                            <h4 class="home-section-title text-primary fw-semibold mb-3">
+                                <i class="bi bi-briefcase"></i> Latest Jobs
+                            </h4>
 
-                                        </div>
-                                    </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"
+                                    th:each="j : ${latestJobs}">
+                                    <!-- 🔗 Click sang trang chi tiết -->
+                                    <a class="d-block text-decoration-none job-link"
+                                       th:href="@{/jobs/{id}(id=${j.id})}">
+                                        <h6 class="fw-semibold text-primary mb-1"
+                                            th:text="${j.title}">Job title</h6>
+
+                                        <small class="text-muted d-block"
+                                               th:text="${j.company.name}">Company name</small>
+
+                                        <span class="job-date mt-1 d-inline-flex align-items-center">
+                                            <i class="bi bi-calendar-event me-1"></i>
+                                            <small th:text="${#temporals.format(j.postedDate, 'dd MMM yyyy')}">
+                                                13 Nov 2025
+                                            </small>
+                                        </span>
+                                    </a>
                                 </li>
-                                <li class="list-group-item text-center text-muted" th:if="${latestJobs.isEmpty()}">
+
+                                <!-- Empty state -->
+                                <li class="list-group-item text-center text-muted"
+                                    th:if="${latestJobs.isEmpty()}">
                                     No jobs found.
                                 </li>
                             </ul>
+
                             <div class="text-end mt-3">
                                 <a href="/jobs" class="btn btn-outline-primary btn-sm">
                                     View all jobs
@@ -143,8 +121,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+
+            </div> <!-- /.row -->
+        </div> <!-- /.container -->
     </section>
 </div>
 </body>
